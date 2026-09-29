@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Officer Profile{% endblock %}
+{% block page_title %}Security Officer Personnel Profile{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title-group">
+      <h2>Officer Identity & Credentials</h2>
+      <span class="panel-subtitle">Manage system access authentication keys and officer account security</span>
+    </div>
+  </div>
+
+  <div class="profile-details-card">
+    <div class="officer-badge-wrapper">
+      <div class="officer-avatar">{{ current_user.username[:2]|upper }}</div>
+      <div class="officer-meta">
+        <h3 class="officer-name">{{ current_user.username }}</h3>
+        <div class="officer-title">Security Operations Center Officer</div>
+        <div class="officer-badges">
+          <span class="clearance-tag">CLEARANCE: LEVEL 3</span>
+          <span class="status-tag">ACTIVE DUTY</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-container" style="margin-top:20px;">
+    <h3 class="section-title">Update Security Password</h3>
+    <form method="POST" class="gov-form">
+      <div class="form-group">
+        <label for="current_password">Current Password</label>
+        <input type="password" id="current_password" name="current_password" required>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-half">
+          <label for="new_password">New Security Password</label>
+          <input type="password" id="new_password" name="new_password" placeholder="At least 8 characters" required>
+        </div>
+
+        <div class="form-group col-half">
+          <label for="confirm_password">Confirm New Password</label>
+          <input type="password" id="confirm_password" name="confirm_password" placeholder="Re-enter new password" required>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-gov-primary">
+          <span>Update Security Password</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

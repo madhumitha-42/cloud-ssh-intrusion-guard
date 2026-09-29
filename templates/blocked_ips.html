@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Blocked IP Registry{% endblock %}
+{% block page_title %}Automated Threat Mitigation Registry{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title-group">
+      <h2>Active Firewall IP Blocks</h2>
+      <span class="panel-subtitle">IP addresses currently blacklisted and blocked at kernel / firewall level</span>
+    </div>
+    <div class="panel-actions">
+      <span class="badge badge-danger">{{ rows|length }} BLACKLISTED IPS</span>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>SOURCE IP ADDRESS</th>
+          <th>BLOCKED TIMESTAMP (UTC)</th>
+          <th>SECURITY THREAT STATUS</th>
+          <th>ENFORCEMENT ACTION</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ip, timestamp in rows %}
+        <tr>
+          <td class="mono ip-cell font-bold">{{ ip }}</td>
+          <td class="mono">{{ timestamp }}</td>
+          <td><span class="badge badge-danger"><span class="badge-dot"></span> HIGH RISK INTRUDER</span></td>
+          <td><span class="gov-status-pill pill-danger">FIREWALL REJECT / DROP</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="empty-row">No active IP blocks currently recorded. System perimeter secure.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="gov-info-card">
+  <div class="gov-info-title">🛡️ FIREWALL ENFORCEMENT PROTOCOL</div>
+  <p>IP blocks are automatically injected into the server firewall rules (via <code>iptables</code> or <code>ufw</code>) upon exceeding maximum authentication threshold attempts. Blocks persist for the configured duration specified in System Settings.</p>
+</div>
+{% endblock %}

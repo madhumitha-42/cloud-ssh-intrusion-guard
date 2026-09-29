@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}Dashboard{% endblock %} · National Cyber Intrusion Guard</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><text y=%2220%22 font-size=%2220%22>🛡️</text></svg>">
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- Official Top Government Banner -->
+<div class="gov-top-banner">
+  <div class="gov-top-banner-inner">
+    <div class="gov-banner-left">
+      <span class="gov-flag">🏛️</span>
+      <span class="gov-banner-title">OFFICIAL GOVERNMENT CYBER SECURITY PORTAL</span>
+      <span class="gov-banner-divider">|</span>
+      <span class="gov-banner-sub">DEPARTMENT OF CYBER DEFENSE & INFRASTRUCTURE PROTECTION</span>
+    </div>
+    <div class="gov-banner-right">
+      <span class="status-indicator-live"><span class="pulse-dot"></span> THREAT MONITOR: ACTIVE</span>
+      <span class="gov-classification">UNCLASSIFIED // FOUO</span>
+    </div>
+  </div>
+</div>
+
+<div class="shell">
+
+  <!-- Government Agency Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-seal-icon">
+        <svg viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="46" fill="#0B192C" stroke="#D97706" stroke-width="4"/>
+          <circle cx="50" cy="50" r="39" stroke="#1E3A8A" stroke-width="1.5" stroke-dasharray="4 2"/>
+          <path d="M50 18 L76 30 V50 C76 66 65 80 50 85 C35 80 24 66 24 50 V30 L50 18 Z" fill="#1E293B" stroke="#F59E0B" stroke-width="2.5"/>
+          <path d="M40 50 L47 57 L62 42" stroke="#10B981" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <div class="brand-agency">NCIG SOC PORTAL</div>
+        <div class="brand-full">SSH Intrusion Defense</div>
+        <div class="brand-badge">GOVERNMENT SYSTEM</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <div class="nav-section-title">OPERATIONAL COMMAND</div>
+      
+      <a href="{{ url_for('home') }}" class="nav-item {{ 'active' if active_page == 'home' }}">
+        <svg viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5M5 10v9a1 1 0 0 0 1 1h4v-6h4v6h4a1 1 0 0 0 1-1v-9" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Security Overview</span>
+      </a>
+      
+      <div class="nav-section-title">THREAT MITIGATION</div>
+      
+      <a href="{{ url_for('blocked_ips') }}" class="nav-item {{ 'active' if active_page == 'blocked_ips' }}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M6 6l12 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span>Blocked IP Registry</span>
+      </a>
+      
+      <a href="{{ url_for('alerts') }}" class="nav-item {{ 'active' if active_page == 'alerts' }}">
+        <svg viewBox="0 0 24 24"><path d="M12 3v2M18.4 7 17 8.4M5.6 7 7 8.4M4 15a8 8 0 1 1 16 0c0 2.5 1 3.5 1 3.5H3S4 17.5 4 15Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M9.5 21a2.5 2.5 0 0 0 5 0" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+        <span>Intrusion Alert Feed</span>
+      </a>
+
+      <div class="nav-section-title">ADMINISTRATION & SECURITY</div>
+
+      <a href="{{ url_for('settings') }}" class="nav-item {{ 'active' if active_page == 'settings' }}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M19.4 13.5a1.7 1.7 0 0 0 .3 1.9l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.5V20a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.5-1H4a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.9.3H10a1.7 1.7 0 0 0 1-1.5V4a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.9-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.9V10c.2.6.7 1 1.5 1H20a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z" stroke="currentColor" stroke-width="1.3" fill="none" stroke-linejoin="round"/></svg>
+        <span>Defense Settings</span>
+      </a>
+
+      <a href="{{ url_for('profile') }}" class="nav-item {{ 'active' if active_page == 'profile' }}">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.3" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M4.5 20c1.3-3.6 4.3-5.5 7.5-5.5s6.2 1.9 7.5 5.5" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/></svg>
+        <span>Officer Profile</span>
+      </a>
+
+      <a href="{{ url_for('register') }}" class="nav-item {{ 'active' if active_page == 'register' }}">
+        <svg viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="1.7" fill="none"/><circle cx="8.5" cy="7" r="4" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M20 8v6M23 11h-6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+        <span>Register Personnel</span>
+      </a>
+
+      <a href="{{ url_for('logout') }}" class="nav-item nav-logout">
+        <svg viewBox="0 0 24 24"><path d="M15 4h3a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2h-3M10 17l5-5-5-5M15 12H3" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <span>Sign Out</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-gov-footer">
+      <div class="gov-sys-status">
+        <span class="dot-ok"></span> SYSTEM ACTIVE
+      </div>
+      <div class="gov-sys-id">NODE: US-EAST-SOC01</div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+        <svg viewBox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+      </button>
+
+      <div class="topbar-title-block">
+        <h1 class="page-title">{% block page_title %}Security Command Dashboard{% endblock %}</h1>
+        <div class="topbar-subtitle">National Cyber Defense Intrusion Guard System</div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="gov-clock-widget">
+          <span class="clock-label">SYS UTC TIME</span>
+          <span class="clock-value" id="utcClock">--:--:-- UTC</span>
+        </div>
+
+        <div class="clearance-badge">LEVEL 3 CLEARANCE</div>
+
+        <div class="user-chip">
+          <span class="avatar">{{ current_user.username[:2]|upper if current_user.is_authenticated else 'NC' }}</span>
+          <div class="user-chip-text">
+            <span class="user-name">{{ current_user.username if current_user.is_authenticated else 'Officer' }}</span>
+            <span class="user-role">Security Officer</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+            <div class="flash flash-{{ category }}">
+              <span class="flash-icon">
+                {% if category == 'success' %}✓{% elif category == 'error' %}⚠️{% else %}ℹ️{% endif %}
+              </span>
+              <span>{{ message }}</span>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    <main class="content">
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="gov-main-footer">
+      <div class="gov-footer-line1">
+        <span>NATIONAL CYBER DEFENSE INTRUSION GUARD · DEFENSE INFORMATION SYSTEMS AGENCY</span>
+        <span class="footer-dot">•</span>
+        <span>SECURITY CLASSIFICATION: UNCLASSIFIED // FOUO</span>
+      </div>
+      <div class="gov-footer-line2">
+        Protected by Automated Firewall Threat Guards · All operations compliant with National Cyber Security Directives.
+      </div>
+    </footer>
+  </div>
+</div>
+
+<script>
+  // Live UTC Clock for Government Operations
+  function updateClock() {
+    const clockEl = document.getElementById("utcClock");
+    if (clockEl) {
+      const now = new Date();
+      const h = String(now.getUTCHours()).padStart(2, '0');
+      const m = String(now.getUTCMinutes()).padStart(2, '0');
+      const s = String(now.getUTCSeconds()).padStart(2, '0');
+      clockEl.textContent = `${h}:${m}:${s} UTC`;
+    }
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // Mobile sidebar toggle.
+  document.addEventListener("DOMContentLoaded", () => {
+    const menuBtn = document.getElementById("menuBtn");
+    const sidebar = document.getElementById("sidebar");
+    if (menuBtn && sidebar) {
+      menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
+      document.addEventListener("click", (e) => {
+        if (sidebar.classList.contains("open") && !sidebar.contains(e.target) && !menuBtn.contains(e.target)) {
+          sidebar.classList.remove("open");
+        }
+      });
+    }
+  });
+</script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+{% block title %}Security Overview{% endblock %}
+{% block page_title %}Operational Threat Overview{% endblock %}
+
+{% block content %}
+
+{% if demo_mode %}
+<div class="gov-alert-banner">
+  <div class="banner-icon">ℹ️</div>
+  <div class="banner-text">
+    <strong>DEMO DATA MODE ACTIVE:</strong> Currently displaying simulated intrusion threat vectors. Run <code>python3 ssh_monitor.py</code> on an active Linux production node to feed live SSH auth events into this command console.
+  </div>
+</div>
+{% endif %}
+
+<!-- Live Government Threat Ticker -->
+<div class="gov-threat-ticker">
+  <div class="ticker-label">DEFENSE STATUS:</div>
+  <div class="ticker-content">
+    <span class="ticker-item"><span class="badge-dot dot-danger"></span> SSH BRUTE-FORCE DEFENSE: <strong>ACTIVE</strong></span>
+    <span class="ticker-item"><span class="badge-dot dot-ok"></span> FIREWALL REACTION TIME: <strong>&lt; 500MS</strong></span>
+    <span class="ticker-item"><span class="badge-dot dot-info"></span> TELEGRAM DISPATCHER: <strong>ONLINE</strong></span>
+  </div>
+</div>
+
+<div class="stat-grid">
+  <div class="stat-card card-warn">
+    <div class="stat-header">
+      <div class="stat-icon icon-warn">
+        <svg viewBox="0 0 24 24"><path d="M12 3v2M18.4 7 17 8.4M5.6 7 7 8.4M4 15a8 8 0 1 1 16 0c0 2.5 1 3.5 1 3.5H3S4 17.5 4 15Z" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="stat-trend trend-up">⚠️ DETECTED</span>
+    </div>
+    <div class="stat-num">{{ stats.failed_attempts }}</div>
+    <div class="stat-label">FAILED AUTHENTICATIONS</div>
+    <div class="stat-footer-text">Unauthorized SSH connection attempts</div>
+  </div>
+
+  <div class="stat-card card-danger">
+    <div class="stat-header">
+      <div class="stat-icon icon-danger">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7" fill="none"/><path d="M6 6l12 12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+      </div>
+      <span class="stat-trend trend-danger">🚫 MITIGATED</span>
+    </div>
+    <div class="stat-num">{{ stats.blocked_count }}</div>
+    <div class="stat-label">IPS BLOCKED BY FIREWALL</div>
+    <div class="stat-footer-text">IP addresses actively dropped</div>
+  </div>
+
+  <div class="stat-card card-info">
+    <div class="stat-header">
+      <div class="stat-icon icon-info">
+        <svg viewBox="0 0 24 24"><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.7" fill="none"/></svg>
+      </div>
+      <span class="stat-trend trend-info">🔍 TRACKING</span>
+    </div>
+    <div class="stat-num">{{ stats.tracking_count }}</div>
+    <div class="stat-label">SUSPICIOUS HOSTS TRACKED</div>
+    <div class="stat-footer-text">Hosts under threshold surveillance</div>
+  </div>
+
+  <div class="stat-card card-ok">
+    <div class="stat-header">
+      <div class="stat-icon icon-ok">
+        <svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <span class="stat-trend trend-ok">📡 SENT</span>
+    </div>
+    <div class="stat-num">{{ stats.alerts_sent }}</div>
+    <div class="stat-label">GOV ALERTS DISPATCHED</div>
+    <div class="stat-footer-text">Instant notification dispatches</div>
+  </div>
+</div>
+
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title-group">
+      <h2>Recent Intrusion Activity & Mitigation Log</h2>
+      <span class="panel-subtitle">Real-time incident response log from security monitors</span>
+    </div>
+    <a href="{{ url_for('alerts') }}" class="btn-gov-outline btn-sm">Full Incident Feed →</a>
+  </div>
+
+  <div class="table-wrapper">
+    <table class="table">
+      <thead>
+        <tr>
+          <th>TIMESTAMPS (UTC)</th>
+          <th>SECURITY EVENT</th>
+          <th>SOURCE IP ADDRESS</th>
+          <th>EVENT DETAILS / VECTOR</th>
+          <th>ACTION STATUS</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in recent_events %}
+        <tr>
+          <td class="mono font-bold">{{ e.timestamp }}</td>
+          <td>
+            {% if e.type == 'failed_login' %}<span class="badge badge-warn"><span class="badge-dot"></span> FAILED AUTH</span>
+            {% elif e.type == 'blocked' %}<span class="badge badge-danger"><span class="badge-dot"></span> IP BLOCKED</span>
+            {% elif e.type == 'alert_sent' %}<span class="badge badge-info"><span class="badge-dot"></span> ALERT SENT</span>
+            {% elif e.type == 'unblocked' %}<span class="badge badge-ok"><span class="badge-dot"></span> UNBLOCKED</span>
+            {% else %}<span class="badge">{{ e.type }}</span>{% endif %}
+          </td>
+          <td class="mono ip-cell">{{ e.ip or '—' }}</td>
+          <td class="muted font-medium">
+            {% if e.type == 'failed_login' %}Target user <code class="user-tag">{{ e.user }}</code> (Attempt {{ e.attempt }})
+            {% elif e.type == 'blocked' %}Exceeded limit ({{ e.attempts }} failed attempts)
+            {% elif e.type == 'alert_sent' %}Telegram security channel
+            {% else %}—{% endif %}
+          </td>
+          <td>
+            {% if e.type == 'blocked' %}
+              <span class="gov-status-pill pill-danger">FIREWALL REJECT</span>
+            {% elif e.type == 'failed_login' %}
+              <span class="gov-status-pill pill-warn">LOGGED & COUNTE</span>
+            {% elif e.type == 'alert_sent' %}
+              <span class="gov-status-pill pill-info">DISPATCHED</span>
+            {% else %}
+              <span class="gov-status-pill pill-neutral">NORMAL</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="empty-row">No security incidents recorded in current operational window.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  // Live refresh stats every 8 seconds
+  setInterval(async () => {
+    try {
+      const res = await fetch("{{ url_for('api_stats') }}");
+      if (!res.ok) return;
+      const s = await res.json();
+      const nums = document.querySelectorAll('.stat-num');
+      if (nums.length >= 4) {
+        nums[0].textContent = s.failed_attempts;
+        nums[1].textContent = s.blocked_count;
+        nums[2].textContent = s.tracking_count;
+        nums[3].textContent = s.alerts_sent;
+      }
+    } catch (e) { }
+  }, 8000);
+</script>
+{% endblock %}

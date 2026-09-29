@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.Python
+venv/
+env/
+.venv/
+
+# Runtime files generated automatically — never commit these
+settings.json
+users.db
+blocked_ips.json
+events.jsonl
+monitor.log
+*.log
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/

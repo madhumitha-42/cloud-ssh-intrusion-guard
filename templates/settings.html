@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block title %}Defense Settings{% endblock %}
+{% block page_title %}System Defense Configuration & Threshold Controls{% endblock %}
+
+{% block content %}
+
+<div class="panel">
+  <div class="panel-head">
+    <div class="panel-title-group">
+      <h2>SSH Security & Intrusion Threshold Parameters</h2>
+      <span class="panel-subtitle">Configure automated reaction sensitivity, log targets, and notification channels</span>
+    </div>
+  </div>
+
+  <div class="form-container">
+    <form method="POST" class="gov-form">
+      <div class="form-row">
+        <div class="form-group col-half">
+          <label for="max_attempts">Max Failed Attempts Before Block</label>
+          <input type="number" id="max_attempts" name="max_attempts" value="{{ settings.max_attempts }}" min="1" max="50" required>
+          <small class="form-help">Number of failed SSH logins before triggering automatic IP block.</small>
+        </div>
+
+        <div class="form-group col-half">
+          <label for="block_duration_minutes">Block Duration (Minutes)</label>
+          <input type="number" id="block_duration_minutes" name="block_duration_minutes" value="{{ settings.block_duration_minutes }}" min="1" required>
+          <small class="form-help">Duration to blacklist IP (Default: 1440 minutes = 24 hours).</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="log_file">Target System Auth Log Path</label>
+        <input type="text" id="log_file" name="log_file" value="{{ settings.log_file }}" required>
+        <small class="form-help">Path to Linux SSH log (e.g. <code>/var/log/auth.log</code> or <code>/var/log/secure</code>).</small>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group col-half">
+          <label for="telegram_bot_token">Telegram Bot Token (Optional)</label>
+          <input type="password" id="telegram_bot_token" name="telegram_bot_token" value="{{ settings.telegram_bot_token or '' }}" placeholder="123456789:ABCdef...">
+          <small class="form-help">Token provided by Telegram @BotFather for dispatching alert messages.</small>
+        </div>
+
+        <div class="form-group col-half">
+          <label for="telegram_chat_id">Telegram Security Chat ID (Optional)</label>
+          <input type="text" id="telegram_chat_id" name="telegram_chat_id" value="{{ settings.telegram_chat_id or '' }}" placeholder="-100123456789">
+          <small class="form-help">Target Telegram channel or group chat ID for security dispatches.</small>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="whitelist_ips">Whitelisted IP Addresses (Comma-Separated)</label>
+        <input type="text" id="whitelist_ips" name="whitelist_ips" value="{{ settings.whitelist_ips | join(', ') }}" placeholder="127.0.0.1, 192.168.1.10">
+        <small class="form-help">IP addresses exempt from firewall blacklisting (e.g., administrator jump boxes).</small>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-gov-primary">
+          <span>Save Defense Settings</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
